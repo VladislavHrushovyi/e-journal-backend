@@ -6,4 +6,12 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <Folder Include="Context\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\EJournal.Application\EJournal.Application.csproj" />
+    </ItemGroup>
+
 </Project>

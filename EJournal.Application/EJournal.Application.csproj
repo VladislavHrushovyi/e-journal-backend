@@ -6,4 +6,13 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <Folder Include="Common\" />
+      <Folder Include="Features\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\EJournal.Domain\EJournal.Domain.csproj" />
+    </ItemGroup>
+
 </Project>
