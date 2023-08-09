@@ -7,11 +7,14 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Context\" />
+      <ProjectReference Include="..\EJournal.Application\EJournal.Application.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\EJournal.Application\EJournal.Application.csproj" />
+      <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0-preview.7.23375.6" />
+      <PackageReference Include="Microsoft.Extensions.Options" Version="8.0.0-preview.7.23375.6" />
+      <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0-preview.7.23375.6" />
+      <PackageReference Include="MongoDB.Driver" Version="2.20.0" />
     </ItemGroup>
 
 </Project>

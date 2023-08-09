@@ -14,9 +14,4 @@ public sealed class UnitOfWork
         _WorkDayRepository = workDayRepository;
         _WorkTimeRepository = workTimeRepository;
     }
-
-    public async Task Save(CancellationToken cts)
-    {
-        throw new NotImplementedException();
-    }
 }
