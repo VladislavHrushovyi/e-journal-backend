@@ -11,7 +11,7 @@ public static class Extension
     public static IServiceCollection UsePersistence(this IServiceCollection services, IConfiguration cfg)
     {
         var dbSettings = cfg.GetSection("EJournalMongo");
-        services.Configure<MongoDbSettings>(cfg.GetSection("MongoSettings"));
+        services.Configure<MongoDbSettings>(dbSettings);
         services.AddScoped<DataContext>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IWorkDayRepository, WorkDayRepository>();
