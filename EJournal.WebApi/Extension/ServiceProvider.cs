@@ -1,4 +1,5 @@
-﻿using EJournal.MongoPersistence;
+﻿using EJournal.Application;
+using EJournal.MongoPersistence;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EJournal.WebApi.Extension;
@@ -18,6 +19,7 @@ public static class ServiceProvider
                     .AllowAnyOrigin()
             );
         });
+        services.AddApplicationServices();
         services.UsePersistence(cgf);
     }
 }
