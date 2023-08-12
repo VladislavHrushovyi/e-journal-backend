@@ -9,7 +9,7 @@ namespace EJournal.MongoPersistence.Repositories;
 public class BaseRepository<T> : IBaseRepository<T> where T : BaseEntity
 {
     private readonly DataContext _dataContext;
-    private readonly IMongoCollection<T> _collection;
+    protected readonly IMongoCollection<T> _collection;
     public BaseRepository(DataContext dataContext)
     {
         _dataContext = dataContext;

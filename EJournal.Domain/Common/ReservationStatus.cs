@@ -1,4 +1,4 @@
-﻿using EJournal.Domain.Common.Attrubutes;
+﻿using EJournal.Domain.Common.Attributes;
 
 namespace EJournal.Domain.Common;
 

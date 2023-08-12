@@ -1,4 +1,4 @@
-﻿namespace EJournal.Domain.Common.Attrubutes;
+﻿namespace EJournal.Domain.Common.Attributes;
 
 public class StringValueAttr : Attribute
 {

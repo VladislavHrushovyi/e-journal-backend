@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 using EJournal.Domain.Common;
-using EJournal.Domain.Common.Attrubutes;
+using EJournal.Domain.Common.Attributes;
 
 namespace EJournal.Domain.Extension;
 

@@ -11,5 +11,9 @@ public static class MiddlewareProvider
         app.MapGroup("/user")
             .AddUserEndpoints()
             .WithTags("UserEndpoints");
+
+        app.UseAuthentication();
+        app.UseAuthorization();
+        app.ExceptionHandler();
     }
 }
