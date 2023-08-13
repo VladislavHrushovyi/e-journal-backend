@@ -5,6 +5,6 @@ namespace EJournal.Domain.Entities;
 public class WorkDay : BaseEntity
 {
     public bool IsWorkDay { get; set; } = false;
-    public DayOfWeek DayOfWeek { get; set; }
-    public List<WorkTime>? Times { get; set; }
+    public CustomDayOfWeek DayOfWeek { get; set; }
+    public IEnumerable<WorkTime> Times { get; set; } = Enumerable.Empty<WorkTime>();
 }
