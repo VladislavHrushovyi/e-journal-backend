@@ -33,9 +33,11 @@ public class BaseRepository<T> : IBaseRepository<T> where T : BaseEntity
         return entity;
     }
 
-    public Task<T> Update(T entity, CancellationToken ct)
+    public async Task<T> Update(T entity, CancellationToken ct)
     {
-        throw new NotImplementedException();
+        await _collection.ReplaceOneAsync(x => x.Id == entity.Id, entity, cancellationToken: ct);
+
+        return entity;
     }
 
     public Task<T> Delete(T entity, CancellationToken ct)

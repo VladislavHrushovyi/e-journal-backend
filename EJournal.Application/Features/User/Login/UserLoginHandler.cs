@@ -43,10 +43,10 @@ public sealed class UserLoginHandler : IRequestHandler<UserLoginRequest, UserLog
             new Claim(ClaimTypes.NameIdentifier, foundUser.Id.ToString())
         };
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
-        var tokenDescriptor = new JwtSecurityToken(issuer, audience, claims, 
+        var tokenDescriptor = new JwtSecurityToken(issuer, audience, claims,
             expires: DateTime.Now.AddHours(6), signingCredentials: credentials);
 
         var token = new JwtSecurityTokenHandler().WriteToken(tokenDescriptor);
-        return new UserLoginResponse(){JwtToken = token};
+        return new UserLoginResponse() { JwtToken = token };
     }
 }

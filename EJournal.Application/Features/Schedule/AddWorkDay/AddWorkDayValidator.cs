@@ -1,5 +1,4 @@
-﻿using EJournal.Domain.Common;
-using FluentValidation;
+﻿using FluentValidation;
 
 namespace EJournal.Application.Features.Schedule.AddWorkDay;
 

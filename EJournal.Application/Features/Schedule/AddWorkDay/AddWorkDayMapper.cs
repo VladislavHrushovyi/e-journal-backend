@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-using AutoMapper;
-using EJournal.Domain.Common;
+﻿using AutoMapper;
 using EJournal.Domain.Entities;
 using EJournal.Domain.Extension;
 

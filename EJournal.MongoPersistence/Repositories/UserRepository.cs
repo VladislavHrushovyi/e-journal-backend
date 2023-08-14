@@ -14,8 +14,8 @@ public sealed class UserRepository : BaseRepository<User>, IUserRepository
     public async Task<User> FindOneByProperties(User entity, CancellationToken ct)
     {
         var singleUser = await _collection.Find(x =>
-            x.PhoneNumber == entity.PhoneNumber &&
-            x.Password == entity.Password)
+                x.PhoneNumber == entity.PhoneNumber &&
+                x.Password == entity.Password)
             .FirstOrDefaultAsync(ct);
 
         return singleUser;
