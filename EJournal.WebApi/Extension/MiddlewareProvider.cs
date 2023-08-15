@@ -1,4 +1,5 @@
-﻿using EJournal.WebApi.Extension.Endpoints;
+﻿using EJournal.WebApi.Extension.CustomMiddleware;
+using EJournal.WebApi.Extension.Endpoints;
 
 namespace EJournal.WebApi.Extension;
 
@@ -14,9 +15,9 @@ public static class MiddlewareProvider
         app.MapGroup("/schedule")
             .UseScheduleEndpoints()
             .WithTags("ScheduleEndpoints");
-
         app.UseAuthentication();
         app.UseAuthorization();
+        app.UseAttachUserToContext();
         app.ExceptionHandler();
     }
 }

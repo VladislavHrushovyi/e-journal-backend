@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using EJournal.Application.Common.Exception;
 using EJournal.Application.Repositories;
-using EJournal.Domain.Common;
 using EJournal.Domain.Entities;
 using EJournal.Domain.Extension;
 using MediatR;
