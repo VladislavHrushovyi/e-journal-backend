@@ -21,6 +21,7 @@ public class CreateWeeklyScheduleHandler : IRequestHandler<CreateWeeklyScheduleR
         
         if ((dateNow.DayOfWeek == DayOfWeek.Friday && dateNow.Hour > 15) || !weeklySchedules.Any())
         {
+            await _unitOfWork.WeeklyScheduleRepository.Delete(weeklySchedules.First(), cancellationToken);
             Calendar cal = new CultureInfo("uk-UA").Calendar;
             int week = cal.GetWeekOfYear(dateNow, CalendarWeekRule.FirstDay, DayOfWeek.Monday);
             var allWorkingDays = await _unitOfWork._WorkDayRepository.GetAll(cancellationToken);
