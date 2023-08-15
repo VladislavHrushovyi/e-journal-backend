@@ -1,5 +1,6 @@
 ﻿using EJournal.Application;
 using EJournal.MongoPersistence;
+using EJournal.WebApi.Extension.BackgroundServices.CreatorWeeklySchedule;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
 
@@ -47,6 +48,8 @@ public static class ServiceProvider
                     .AllowAnyOrigin()
             );
         });
+        services.AddHostedService<CreatorNewWeeklySchedule>();
+        services.AddScoped<ICreateWeeklyScheduleProcess, CreateWeeklyScheduleProcess>();
         services.AddJwtAuthorization(cfg);
         services.AddApplicationServices();
         services.UsePersistence(cfg);

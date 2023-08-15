@@ -21,9 +21,9 @@ public class BaseRepository<T> : IBaseRepository<T> where T : BaseEntity
         throw new NotImplementedException();
     }
 
-    public Task<T> GetAll(CancellationToken ct)
+    public async Task<IEnumerable<T>> GetAll(CancellationToken ct)
     {
-        throw new NotImplementedException();
+        return (await _collection.FindAsync(_ => true, cancellationToken: ct)).ToList(cancellationToken: ct);
     }
 
     [Obsolete("Create entity")]

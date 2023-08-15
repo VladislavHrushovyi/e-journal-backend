@@ -15,7 +15,7 @@ public static class Extension
         services.AddScoped<DataContext>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IWorkDayRepository, WorkDayRepository>();
-        services.AddScoped<IWorkTimeRepository, WorkTimeRepository>();
+        services.AddScoped<IWeeklyScheduleRepository, WeeklyScheduleRepository>();
         services.AddScoped<BaseUnitOfWork, UnitOfWork>();
         return services;
     }

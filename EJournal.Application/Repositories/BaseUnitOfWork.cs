@@ -4,11 +4,11 @@ public class BaseUnitOfWork
 {
     public readonly IUserRepository _userRepository;
     public readonly IWorkDayRepository _WorkDayRepository;
-    public readonly IWorkTimeRepository _WorkTimeRepository;
+    public readonly IWeeklyScheduleRepository WeeklyScheduleRepository;
 
-    public BaseUnitOfWork(IWorkTimeRepository workTimeRepository, IWorkDayRepository workDayRepository, IUserRepository userRepository)
+    public BaseUnitOfWork(IWeeklyScheduleRepository weeklyScheduleRepository, IWorkDayRepository workDayRepository, IUserRepository userRepository)
     {
-        _WorkTimeRepository = workTimeRepository;
+        WeeklyScheduleRepository = weeklyScheduleRepository;
         _WorkDayRepository = workDayRepository;
         _userRepository = userRepository;
     }

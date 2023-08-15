@@ -10,7 +10,7 @@ public sealed class DataContext
     public readonly IMongoDatabase MongoDatabase;
     public IMongoCollection<User> Users { get; set; }
     public IMongoCollection<WorkDay> WorkDays { get; set; }
-    public IMongoCollection<WorkTime> WorkTimes { get; set; }
+    public IMongoCollection<WeeklySchedule> WeeklySchedule { get; set; }
 
     public DataContext(IOptions<MongoDbSettings> settings)
     {
@@ -19,6 +19,6 @@ public sealed class DataContext
         
         Users = MongoDatabase.GetCollection<User>(settings.Value.UserCollectionName);
         WorkDays = MongoDatabase.GetCollection<WorkDay>(settings.Value.WorkDaysCollectionName);
-        WorkTimes = MongoDatabase.GetCollection<WorkTime>(settings.Value.WorkTimeCollectionName);
+        WeeklySchedule = MongoDatabase.GetCollection<WeeklySchedule>(settings.Value.WeeklyScheduleCollectionName);
     }
 }

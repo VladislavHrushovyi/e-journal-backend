@@ -5,7 +5,7 @@ namespace EJournal.MongoPersistence.Repositories;
 
 public sealed class UnitOfWork : BaseUnitOfWork
 {
-    public UnitOfWork(IWorkTimeRepository workTimeRepository, IWorkDayRepository workDayRepository, IUserRepository userRepository) : base(workTimeRepository, workDayRepository, userRepository)
+    public UnitOfWork(IWeeklyScheduleRepository weeklyScheduleRepository, IWorkDayRepository workDayRepository, IUserRepository userRepository) : base(weeklyScheduleRepository, workDayRepository, userRepository)
     {
     }
 }

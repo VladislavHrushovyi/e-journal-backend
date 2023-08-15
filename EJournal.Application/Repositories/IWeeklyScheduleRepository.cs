@@ -2,7 +2,7 @@
 
 namespace EJournal.Application.Repositories;
 
-public interface IWorkTimeRepository : IBaseRepository<WorkTime>
+public interface IWeeklyScheduleRepository : IBaseRepository<WeeklySchedule>
 {
     
 }
