@@ -11,5 +11,5 @@ public sealed class RecordingToTimeWorkRequest : IRequest<RecordingToTimeWorkRes
     public Guid TimeId { get; set; }
     
     [JsonIgnore]
-    public Guid? UserId { get; set; }
+    public Guid UserId { get; set; }
 }
