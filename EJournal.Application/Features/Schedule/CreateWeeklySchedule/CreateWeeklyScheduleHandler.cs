@@ -18,13 +18,29 @@ public class CreateWeeklyScheduleHandler : IRequestHandler<CreateWeeklyScheduleR
     {
         var dateNow = DateTime.Now;
         var weeklySchedules = await _unitOfWork.WeeklyScheduleRepository.GetAll(cancellationToken);
-        
-        if ((dateNow.DayOfWeek == DayOfWeek.Friday && dateNow.Hour > 15) || !weeklySchedules.Any())
+        var dateFirstDayOfWeek = DateOnly.FromDateTime(DateTime.Now)
+            .AddDays(-((int)DateTime.Today.DayOfWeek - 1));
+
+        var schedulesList = weeklySchedules.ToList();
+        if ((dateNow.DayOfWeek == DayOfWeek.Friday && dateNow.Hour > 15) || !schedulesList.Any())
         {
-            await _unitOfWork.WeeklyScheduleRepository.Delete(weeklySchedules.First(), cancellationToken);
+            if (schedulesList.Count() > 1)
+            {
+                await _unitOfWork.WeeklyScheduleRepository.Delete(schedulesList.Last(), cancellationToken);   
+            }
             Calendar cal = new CultureInfo("uk-UA").Calendar;
             int week = cal.GetWeekOfYear(dateNow, CalendarWeekRule.FirstDay, DayOfWeek.Monday);
             var allWorkingDays = await _unitOfWork._WorkDayRepository.GetAll(cancellationToken);
+            allWorkingDays = allWorkingDays.Select(workDay => new WorkDay()
+            {
+                Id = workDay.Id,
+                Date = dateFirstDayOfWeek.AddDays((int)workDay.DayOfWeek),
+                CreatedAt = workDay.CreatedAt,
+                DayOfWeek = workDay.DayOfWeek,
+                Times = workDay.Times,
+                UpdateAt = workDay.UpdateAt,
+                IsWorkDay = workDay.IsWorkDay
+            });
             await _unitOfWork.WeeklyScheduleRepository.Create(new WeeklySchedule()
             {
                 Id = Guid.NewGuid(),

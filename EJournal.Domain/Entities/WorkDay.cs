@@ -6,5 +6,6 @@ public class WorkDay : BaseEntity
 {
     public bool IsWorkDay { get; set; } = false;
     public CustomDayOfWeek DayOfWeek { get; set; }
+    public DateOnly Date { get; set; }
     public IEnumerable<WorkTime> Times { get; set; } = Enumerable.Empty<WorkTime>();
 }

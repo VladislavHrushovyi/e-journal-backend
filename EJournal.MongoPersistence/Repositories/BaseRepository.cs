@@ -16,9 +16,9 @@ public class BaseRepository<T> : IBaseRepository<T> where T : BaseEntity
         _collection = _dataContext.MongoDatabase.GetCollection<T>(typeof(T).Name);
     }
 
-    public Task<T> GetById(Guid id, CancellationToken ct)
+    public async Task<T> GetById(Guid id, CancellationToken ct)
     {
-        throw new NotImplementedException();
+        return (await _collection.FindAsync(x => x.Id == id, cancellationToken: ct)).First(cancellationToken: ct);
     }
 
     public async Task<IEnumerable<T>> GetAll(CancellationToken ct)

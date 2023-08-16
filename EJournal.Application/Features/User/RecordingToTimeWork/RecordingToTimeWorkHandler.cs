@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using EJournal.Application.Repositories;
 using EJournal.Domain.Common;
+using EJournal.Domain.Entities;
 using MediatR;
 
 namespace EJournal.Application.Features.User.RecordingToTimeWork;
@@ -16,6 +17,17 @@ public sealed class RecordingToTimeWorkHandler : IRequestHandler<RecordingToTime
     public async Task<RecordingToTimeWorkResponse> Handle(RecordingToTimeWorkRequest request, CancellationToken cancellationToken)
     {
         var currentWeek = await _unitOfWork.WeeklyScheduleRepository.GetAll(cancellationToken);
+        var newRecordUser = new RecordHistoryItem()
+        {
+            Id = Guid.NewGuid(),
+            CreatedAt = DateOnly.FromDateTime(DateTime.Now),
+            DayOfWeek = request.DayOfWeek,
+        };
+        var user = await _unitOfWork._userRepository.GetById(request.UserId, cancellationToken);
+        if (user.RecordHistoryItems is null)
+        {
+            user.RecordHistoryItems = new List<RecordHistoryItem>();
+        }
         var activeWeek = currentWeek.FirstOrDefault();
         if (activeWeek == default)
         {
@@ -33,6 +45,9 @@ public sealed class RecordingToTimeWorkHandler : IRequestHandler<RecordingToTime
                     if (t.Id != request.TimeId) return t;
                     t.UserId = request.UserId;
                     t.Status = ReservationStatus.TemporaryHold;
+                    newRecordUser.Date = new DateTime(x.Date.Year, x.Date.Month, x.Date.Day, t.Time.Hour, t.Time.Minute,
+                        0);
+                    newRecordUser.Status = ReservationStatus.TemporaryHold;
 
                     return t;
                 });
@@ -40,8 +55,10 @@ public sealed class RecordingToTimeWorkHandler : IRequestHandler<RecordingToTime
 
             return x;
         });
-
         await _unitOfWork.WeeklyScheduleRepository.Update(activeWeek, cancellationToken);
+
+        user.RecordHistoryItems = user.RecordHistoryItems.Append(newRecordUser);
+        await _unitOfWork._userRepository.Update(user, cancellationToken);
         return new RecordingToTimeWorkResponse()
         {
             Status = HttpStatusCode.OK
