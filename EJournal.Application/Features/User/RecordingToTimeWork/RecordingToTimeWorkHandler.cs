@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.Globalization;
+using System.Net;
 using EJournal.Application.Repositories;
 using EJournal.Domain.Common;
 using EJournal.Domain.Entities;
@@ -24,7 +25,7 @@ public sealed class RecordingToTimeWorkHandler : IRequestHandler<RecordingToTime
             DayOfWeek = request.DayOfWeek,
         };
         var user = await _unitOfWork._userRepository.GetById(request.UserId, cancellationToken);
-        if (user.RecordHistoryItems is null)
+        if (user.RecordHistoryItems == null)
         {
             user.RecordHistoryItems = new List<RecordHistoryItem>();
         }
@@ -55,10 +56,12 @@ public sealed class RecordingToTimeWorkHandler : IRequestHandler<RecordingToTime
 
             return x;
         });
-        await _unitOfWork.WeeklyScheduleRepository.Update(activeWeek, cancellationToken);
+        var updateActiveWeekTask = _unitOfWork.WeeklyScheduleRepository.Update(activeWeek, cancellationToken);
 
         user.RecordHistoryItems = user.RecordHistoryItems.Append(newRecordUser);
-        await _unitOfWork._userRepository.Update(user, cancellationToken);
+        var updateUserTask = _unitOfWork._userRepository.Update(user, cancellationToken);
+        
+        await Task.WhenAll(updateUserTask, updateActiveWeekTask);
         return new RecordingToTimeWorkResponse()
         {
             Status = HttpStatusCode.OK

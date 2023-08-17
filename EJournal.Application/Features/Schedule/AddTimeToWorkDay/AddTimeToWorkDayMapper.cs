@@ -19,7 +19,8 @@ public sealed class AddTimeToWorkDayMapper : Profile
                     1,
                     Int32.Parse(dest.Time.Split(':')[0]),
                     Int32.Parse(dest.Time.Split(':')[1]),
-                    0
+                    0,
+                    DateTimeKind.Unspecified
                 )))
             .ForMember(dest => dest.Status, opt
                 => opt.MapFrom(_ => ReservationStatus.Free))
