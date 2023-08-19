@@ -1,5 +1,6 @@
 ﻿using EJournal.Application.Features.Schedule.AddTimeToWorkDay;
 using EJournal.Application.Features.Schedule.AddWorkDay;
+using EJournal.Application.Features.Schedule.ChangeWorkTimeStatus;
 using MediatR;
 
 namespace EJournal.WebApi.Extension.Endpoints;
@@ -13,6 +14,8 @@ public static class ScheduleEndpoints
         group.MapPost("/add-time-to-work-day",
             async (AddTimeToWorkDayRequest req, IMediator mediator, CancellationToken ct)
                 => await mediator.Send(req, ct));
+        group.MapPost("/update-work-time-status", async (ChangeStatusRequest req, IMediator mediator, CancellationToken ct) 
+            => await mediator.Send(req, ct));
         return group;
     }
 }

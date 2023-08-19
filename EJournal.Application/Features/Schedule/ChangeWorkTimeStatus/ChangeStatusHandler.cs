@@ -1,4 +1,5 @@
-﻿using EJournal.Application.Repositories;
+﻿using System.Net;
+using EJournal.Application.Repositories;
 using EJournal.Domain.Common;
 using MediatR;
 
@@ -59,10 +60,14 @@ public sealed class ChangeStatusHandler : IRequestHandler<ChangeStatusRequest, C
 
                     return x;
                 });
-                var UserUpdateTask = _unitOfWork._userRepository.Update(user, cancellationToken);
-                var ScheduleUpdate = _unitOfWork.WeeklyScheduleRepository.Update(currentSchedule, cancellationToken); //TODO HERE BUG
+                var userUpdateTask = _unitOfWork._userRepository.Update(user, cancellationToken);
+                var scheduleUpdate = _unitOfWork.WeeklyScheduleRepository.Update(currentSchedule, cancellationToken);
+                await Task.WhenAll(userUpdateTask, scheduleUpdate);
                 break;
         }
-        return new ChangeStatusResponse();
+        return new ChangeStatusResponse()
+        {
+            StatusCode = HttpStatusCode.OK
+        };
     }
 }
