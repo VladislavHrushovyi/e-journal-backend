@@ -14,7 +14,8 @@ public class CreateWeeklyScheduleHandler : IRequestHandler<CreateWeeklyScheduleR
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<CreateWeeklyScheduleResponse> Handle(CreateWeeklyScheduleRequest request, CancellationToken cancellationToken)
+    public async Task<CreateWeeklyScheduleResponse> Handle(CreateWeeklyScheduleRequest request,
+        CancellationToken cancellationToken)
     {
         var dateNow = DateTime.Now;
         var weeklySchedules = await _unitOfWork.WeeklyScheduleRepository.GetAll(cancellationToken);
@@ -22,12 +23,18 @@ public class CreateWeeklyScheduleHandler : IRequestHandler<CreateWeeklyScheduleR
             .AddDays(-((int)DateTime.Today.DayOfWeek - 1));
 
         var schedulesList = weeklySchedules.ToList();
-        if ((dateNow.DayOfWeek == DayOfWeek.Friday && dateNow.Hour > 15) || !schedulesList.Any())
+        if ((
+                dateNow.DayOfWeek is DayOfWeek.Friday or DayOfWeek.Saturday or DayOfWeek.Sunday
+                && dateNow.Hour > 15
+                )
+            ||
+            !schedulesList.Any())
         {
-            if (schedulesList.Count() > 1)
+            if (schedulesList.Count > 1)
             {
-                await _unitOfWork.WeeklyScheduleRepository.Delete(schedulesList.Last(), cancellationToken);   
+                await _unitOfWork.WeeklyScheduleRepository.Delete(schedulesList.Last(), cancellationToken);
             }
+
             Calendar cal = new CultureInfo("uk-UA").Calendar;
             int week = cal.GetWeekOfYear(dateNow, CalendarWeekRule.FirstDay, DayOfWeek.Monday);
             var allWorkingDays = await _unitOfWork._WorkDayRepository.GetAll(cancellationToken);
