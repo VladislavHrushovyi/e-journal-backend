@@ -21,60 +21,65 @@ public sealed class ChangeStatusHandler : IRequestHandler<ChangeStatusRequest, C
         var workTimeById = currentSchedule
             .WorkDays.First(x => x.DayOfWeek == request.DayOfWeek)
             .Times.First(x => x.Id == request.WorkTimeId);
-        Domain.Entities.User user = await _unitOfWork._userRepository.GetById(workTimeById.UserId, cancellationToken);
-
-        switch (request.Status)
+        Domain.Entities.User? user = null;
+        if (workTimeById.UserId != default)
         {
-            case ReservationStatus.Free:
-                workTimeById.Status = ReservationStatus.Free;
-                workTimeById.UserId = new Guid();
-                ChangeStatus(currentSchedule, workTimeById, user, ReservationStatus.Canceled, request.DayOfWeek);
-                break;
-            case ReservationStatus.Done:
-                workTimeById.Status = ReservationStatus.Done;
-                ChangeStatus(currentSchedule, workTimeById, user, ReservationStatus.Done, request.DayOfWeek);
-                break;
-            case ReservationStatus.Canceled:
-                workTimeById.Status = ReservationStatus.Canceled;
-                ChangeStatus(currentSchedule, workTimeById, user, ReservationStatus.Canceled, request.DayOfWeek);
-                break;
-            case ReservationStatus.Reserved:
-                workTimeById.Status = ReservationStatus.Reserved;
-                ChangeStatus(currentSchedule, workTimeById, user, ReservationStatus.Reserved, request.DayOfWeek);
-                break;
-            case ReservationStatus.TemporaryHold:
-                workTimeById.Status = ReservationStatus.TemporaryHold;
-                ChangeStatus(currentSchedule, workTimeById, user, ReservationStatus.TemporaryHold, request.DayOfWeek);
-                break;
+            user = await _unitOfWork._userRepository.GetById(workTimeById.UserId, cancellationToken);
+        }
+
+        workTimeById.Status = request.Status;
+        if (request.Status is ReservationStatus.Free)
+        {
+            workTimeById.Status = ReservationStatus.Free;
+            workTimeById.UserId = new Guid();
+            await ChangeStatus(currentSchedule, workTimeById, request.DayOfWeek, cancellationToken);
+        }
+        else
+        {
+            await ChangeStatus(currentSchedule, workTimeById, request.DayOfWeek, cancellationToken);
+        }
+
+        if (user != null)
+        {
+            await ChangeRecordStatusInUser(
+            user, workTimeById.Id, 
+            request.Status == ReservationStatus.Free ? ReservationStatus.Canceled : request.Status,
+            cancellationToken);
         }
         
-        var userUpdateTask = _unitOfWork._userRepository.Update(user, cancellationToken);
-        var scheduleUpdateTsk = _unitOfWork.WeeklyScheduleRepository.Update(currentSchedule, cancellationToken);
-        await Task.WhenAll(userUpdateTask, scheduleUpdateTsk);
         return new ChangeStatusResponse()
         {
             StatusCode = HttpStatusCode.OK
         };
     }
 
-    private void ChangeStatus(
-        WeeklySchedule currentWeekly, 
-        WorkTime workTimeById, 
-        Domain.Entities.User user, 
-        ReservationStatus status,
-        CustomDayOfWeek dayOfWeek
-        ) 
+    private Task ChangeRecordStatusInUser(
+        Domain.Entities.User user,
+        Guid workTimeId, 
+        ReservationStatus status, 
+        CancellationToken ct
+        )
     {
         user.RecordHistoryItems = user.RecordHistoryItems.Select(x =>
         {
-            if (x.WorkTimeId == workTimeById.Id)
+            if (x.WorkTimeId == workTimeId)
             {
                 x.Status = status;
             }
 
             return x;
         });
+        
+        return _unitOfWork._userRepository.Update(user, ct);
+    }
 
+    private Task ChangeStatus(
+        WeeklySchedule currentWeekly, 
+        WorkTime workTimeById,
+        CustomDayOfWeek dayOfWeek,
+        CancellationToken ct
+        ) 
+    {
         currentWeekly.WorkDays = currentWeekly.WorkDays.Select(x =>
         {
             if (x.DayOfWeek == dayOfWeek)
@@ -92,5 +97,6 @@ public sealed class ChangeStatusHandler : IRequestHandler<ChangeStatusRequest, C
 
             return x;
         });
+        return _unitOfWork.WeeklyScheduleRepository.Update(currentWeekly, ct);
     }
 }

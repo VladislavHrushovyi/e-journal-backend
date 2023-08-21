@@ -30,7 +30,7 @@ public sealed class RecordingToTimeWorkHandler : IRequestHandler<RecordingToTime
             user.RecordHistoryItems = new List<RecordHistoryItem>();
         }
         var activeWeek = currentWeek.FirstOrDefault();
-        if (activeWeek == default)
+        if (activeWeek == null)
         {
             return new RecordingToTimeWorkResponse()
             {
