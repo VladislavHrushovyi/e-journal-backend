@@ -2,6 +2,7 @@
 using EJournal.Application.Features.User.Login;
 using EJournal.Application.Features.User.RecordingToTimeWork;
 using EJournal.Application.Features.User.Register;
+using EJournal.Application.Features.User.UpdateInformation;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -28,6 +29,19 @@ public static class UserEndpoints
             req.UserId = userGuid;
             await mediator.Send(req, ct);
         });
+        group.MapPatch("/update-information",
+            async (
+                    HttpContext context,
+                    UpdateInformationRequest req, 
+                    IMediator mediator, 
+                    CancellationToken ct)
+                =>
+            {
+                var userIdString = context.User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
+                var userGuid = Guid.Parse(userIdString);
+                req.UserId = userGuid;
+                await mediator.Send(req, ct);
+            });
         group.MapGet("/hello", [Authorize] async () => "Authorize");
         return group;
     }
