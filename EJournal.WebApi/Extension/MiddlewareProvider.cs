@@ -9,6 +9,12 @@ public static class MiddlewareProvider
     {
         app.UseSwagger();
         app.UseSwaggerUI();
+        app.UseCors(builder =>
+        {
+            builder.AllowAnyHeader();
+            builder.AllowAnyMethod();
+            builder.AllowAnyOrigin();
+        });
         app.MapGroup("/user")
             .AddUserEndpoints()
             .WithTags("UserEndpoints");
