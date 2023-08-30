@@ -28,7 +28,7 @@ public sealed class UpdateInformationHandler : IRequestHandler<UpdateInformation
         newUserData.UpdateAt = DateOnly.FromDateTime(DateTime.Now);
 
         var result = await _unitOfWork._userRepository.Update(newUserData, cancellationToken);
-
-        return _mapper.Map<UpdateInformationResponse>(result);
+        var response = _mapper.Map<UpdateInformationResponse>(result);
+        return response;
     }
 }

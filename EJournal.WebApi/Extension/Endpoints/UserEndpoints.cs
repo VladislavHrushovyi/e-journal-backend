@@ -32,7 +32,7 @@ public static class UserEndpoints
         group.MapPatch("/update-information",
             async (
                     HttpContext context,
-                    UpdateInformationRequest req, 
+                    [FromBody]UpdateInformationRequest req, 
                     IMediator mediator, 
                     CancellationToken ct)
                 =>
@@ -40,7 +40,7 @@ public static class UserEndpoints
                 var userIdString = context.User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
                 var userGuid = Guid.Parse(userIdString);
                 req.UserId = userGuid;
-                await mediator.Send(req, ct);
+                return await mediator.Send(req, ct);
             });
         group.MapGet("/hello", [Authorize] async () => "Authorize");
         return group;

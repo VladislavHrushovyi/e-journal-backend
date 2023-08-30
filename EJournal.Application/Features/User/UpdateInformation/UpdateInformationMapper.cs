@@ -21,7 +21,7 @@ public sealed class UpdateInformationMapper : Profile
                 => opt.MapFrom((src, _) => src.FirstName + " " + src.LastName))
             .ForMember(dest => dest.PhoneNumber, opt
                 => opt.MapFrom(src => src.PhoneNumber))
-            .ForMember(dest => dest.PhoneNumber, opt
+            .ForMember(dest => dest.UpdateAt, opt
                 => opt.MapFrom(src => src.UpdateAt.ToString()));
     }
 }
