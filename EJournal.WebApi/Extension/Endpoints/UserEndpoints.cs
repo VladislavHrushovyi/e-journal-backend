@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+using EJournal.Application.Features.User.GetFullInformation;
 using EJournal.Application.Features.User.Login;
 using EJournal.Application.Features.User.RecordingToTimeWork;
 using EJournal.Application.Features.User.Register;
@@ -27,7 +28,7 @@ public static class UserEndpoints
             var userIdString = context.User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
             var userGuid = Guid.Parse(userIdString);
             req.UserId = userGuid;
-            await mediator.Send(req, ct);
+            return await mediator.Send(req, ct);
         });
         group.MapPatch("/update-information",
             async (
@@ -42,6 +43,15 @@ public static class UserEndpoints
                 req.UserId = userGuid;
                 return await mediator.Send(req, ct);
             });
+        group.MapGet("/info", [Authorize] async (HttpContext context, IMediator mediator, CancellationToken ct)
+            =>
+        {
+            var userIdString = context.User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
+            var userGuid = Guid.Parse(userIdString);
+            var req = new GetFullInformationRequest() { UserId = userGuid };
+
+            return await mediator.Send(req, ct);
+        });
         group.MapGet("/hello", [Authorize] async () => "Authorize");
         return group;
     }
