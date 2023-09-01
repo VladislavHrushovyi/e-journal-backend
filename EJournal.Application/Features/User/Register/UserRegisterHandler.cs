@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using EJournal.Application.Common.Exception;
 using EJournal.Application.Repositories;
 using MediatR;
 
@@ -18,6 +19,11 @@ public sealed class UserRegisterHandler : IRequestHandler<UserRegisterRequest, U
     public async Task<UserRegisterResponse> Handle(UserRegisterRequest request, CancellationToken cancellationToken)
     {
         var entity = _mapper.Map<Domain.Entities.User>(request);
+        var userExisted = await _unitOfWork._userRepository.GetAll(cancellationToken);
+        if (userExisted.Any(x => x.PhoneNumber == entity.PhoneNumber))
+        {
+            throw new BadRequestException("User has been registered with same phone number");
+        }
         entity.Id = Guid.NewGuid();
         entity.CreatedAt = DateOnly.FromDateTime(DateTime.Now);
         var result = await _unitOfWork._userRepository.Create(entity, cancellationToken);
