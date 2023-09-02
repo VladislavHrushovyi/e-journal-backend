@@ -3,6 +3,7 @@ using EJournal.Application.Features.Schedule.AddWorkDay;
 using EJournal.Application.Features.Schedule.ChangeWorkTimeStatus;
 using EJournal.Application.Features.Schedule.GetActualWeeklySchedule;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EJournal.WebApi.Extension.Endpoints;
 
@@ -10,14 +11,14 @@ public static class ScheduleEndpoints
 {
     public static RouteGroupBuilder UseScheduleEndpoints(this RouteGroupBuilder group)
     {
-        group.MapPost("/add-work-day", async (AddWorkDayRequest req, IMediator mediatr, CancellationToken ct)
+        group.MapPost("/add-work-day", [Authorize]async (AddWorkDayRequest req, IMediator mediatr, CancellationToken ct)
             => await mediatr.Send(req, ct));
         group.MapPost("/add-time-to-work-day",
-            async (AddTimeToWorkDayRequest req, IMediator mediator, CancellationToken ct)
+            [Authorize] async (AddTimeToWorkDayRequest req, IMediator mediator, CancellationToken ct)
                 => await mediator.Send(req, ct));
-        group.MapPost("/update-work-time-status", async (ChangeStatusRequest req, IMediator mediator, CancellationToken ct) 
+        group.MapPost("/update-work-time-status", [Authorize] async (ChangeStatusRequest req, IMediator mediator, CancellationToken ct) 
             => await mediator.Send(req, ct));
-        group.MapGet("/actual-schedule", async (IMediator mediator, CancellationToken ct)
+        group.MapGet("/actual-schedule", [Authorize] async (IMediator mediator, CancellationToken ct)
             => await mediator.Send(new GetActualWeeklyScheduleRequest(), ct));
         return group;
     }

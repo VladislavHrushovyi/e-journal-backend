@@ -23,7 +23,7 @@ public static class MiddlewareProvider
             .WithTags("ScheduleEndpoints");
         app.UseAuthentication();
         app.UseAuthorization();
-        app.UseAttachUserToContext();
+        //app.UseAttachUserToContext();
         app.ExceptionHandler();
     }
 }

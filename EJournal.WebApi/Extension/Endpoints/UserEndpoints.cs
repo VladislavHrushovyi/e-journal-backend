@@ -18,6 +18,16 @@ public static class UserEndpoints
             => await mediator.Send(req, ct));
         group.MapPost("/login", async (UserLoginRequest req, IMediator mediator, CancellationToken ct)
             => await mediator.Send(req, ct));
+        group.MapPost("/check-auth-token", async (HttpContext context, CancellationToken ct)
+            =>
+        {
+            var isUserCredentials = context.User.Claims.Any();
+            if (isUserCredentials)
+            {
+                return true;
+            }
+            return false;
+        });
         group.MapPost("/recording-to-work-time", [Authorize] async
         (
             HttpContext context,
@@ -31,7 +41,7 @@ public static class UserEndpoints
             return await mediator.Send(req, ct);
         });
         group.MapPatch("/update-information",
-            async (
+            [Authorize] async (
                     HttpContext context,
                     [FromBody]UpdateInformationRequest req, 
                     IMediator mediator, 
