@@ -12,4 +12,6 @@ public sealed class RecordingToTimeWorkRequest : IRequest<RecordingToTimeWorkRes
     
     [JsonIgnore]
     public Guid UserId { get; set; }
+
+    public string UserMessage { get; set; }
 }

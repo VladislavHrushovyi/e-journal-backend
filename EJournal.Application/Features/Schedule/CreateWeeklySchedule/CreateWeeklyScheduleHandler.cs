@@ -45,7 +45,7 @@ public class CreateWeeklyScheduleHandler : IRequestHandler<CreateWeeklyScheduleR
 
     private bool IsOldWeekSchedule(DateTime now, IEnumerable<WeeklySchedule> currWeeklySchedule)
     {
-        return now.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday
+        return (now.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday)
                ||
                now.DayOfWeek is DayOfWeek.Friday && now.Hour >= 15
                ||
@@ -72,7 +72,7 @@ public class CreateWeeklyScheduleHandler : IRequestHandler<CreateWeeklyScheduleR
         {
             Id = Guid.NewGuid(),
             CreatedAt = DateOnly.FromDateTime(DateTime.Now),
-            WeekId = currNumberWeek + "-" + dateFirstDayOfWeek.Year,
+            WeekId = (currNumberWeek + 1) + "-" + dateFirstDayOfWeek.Year,
             WorkDays = allWorkingDays
         }, cancellationToken);
     }

@@ -46,6 +46,7 @@ public sealed class RecordingToTimeWorkHandler : IRequestHandler<RecordingToTime
                     var time = DateTime.Parse(t.Time);
                     if (t.Id != request.TimeId) return t;
                     t.UserId = request.UserId;
+                    t.UserMessage = request.UserMessage;
                     t.Status = ReservationStatus.TemporaryHold;
                     newRecordUser.Date = new DateTime(x.Date.Year, x.Date.Month, x.Date.Day, time.Hour, time.Minute,
                         0).ToString();

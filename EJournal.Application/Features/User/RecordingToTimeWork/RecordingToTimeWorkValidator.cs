@@ -16,5 +16,6 @@ public sealed class RecordingToTimeWorkValidator : AbstractValidator<RecordingTo
         RuleFor(src => src.UserId)
             .NotEmpty()
             .NotNull();
+        RuleFor(src => src.UserMessage).MaximumLength(200);
     }
 }
