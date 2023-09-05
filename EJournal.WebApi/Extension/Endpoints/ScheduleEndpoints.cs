@@ -1,6 +1,7 @@
 ﻿using EJournal.Application.Features.Schedule.AddTimeToWorkDay;
 using EJournal.Application.Features.Schedule.AddWorkDay;
 using EJournal.Application.Features.Schedule.ChangeWorkTimeStatus;
+using EJournal.Application.Features.Schedule.GetActiveRecords;
 using EJournal.Application.Features.Schedule.GetActualWeeklySchedule;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -20,6 +21,8 @@ public static class ScheduleEndpoints
             => await mediator.Send(req, ct));
         group.MapGet("/actual-schedule", [Authorize] async (IMediator mediator, CancellationToken ct)
             => await mediator.Send(new GetActualWeeklyScheduleRequest(), ct));
+        group.MapGet("/active-record", [Authorize] async (IMediator mediator, CancellationToken ct)
+            => await mediator.Send(new GetActiveRecordsRequest(), ct));
         return group;
     }
 }
