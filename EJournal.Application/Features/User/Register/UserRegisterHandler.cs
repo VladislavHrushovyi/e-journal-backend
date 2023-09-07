@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using EJournal.Application.Common.Exception;
 using EJournal.Application.Repositories;
+using EJournal.Domain.Entities;
 using MediatR;
 
 namespace EJournal.Application.Features.User.Register;
@@ -26,6 +27,7 @@ public sealed class UserRegisterHandler : IRequestHandler<UserRegisterRequest, U
         }
         entity.Id = Guid.NewGuid();
         entity.CreatedAt = DateOnly.FromDateTime(DateTime.Now);
+        entity.RecordHistoryItems = Array.Empty<RecordHistoryItem>();
         var result = await _unitOfWork._userRepository.Create(entity, cancellationToken);
 
         return _mapper.Map<Domain.Entities.User, UserRegisterResponse>(result);
