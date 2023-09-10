@@ -19,5 +19,5 @@
     <ItemGroup>
       <ProjectReference Include="..\EJournal.MongoPersistence\EJournal.MongoPersistence.csproj" />
     </ItemGroup>
-
+    
 </Project>
