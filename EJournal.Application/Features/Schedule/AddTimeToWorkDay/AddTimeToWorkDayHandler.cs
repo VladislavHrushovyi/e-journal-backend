@@ -31,9 +31,12 @@ public sealed class AddTimeToWorkDayHandler : IRequestHandler<AddTimeToWorkDayRe
         times.Add(workTimeEntity);
         workDayByDayOfWeek.Times = times;
         await _unitOfWork._WorkDayRepository.Update(workDayByDayOfWeek, cancellationToken);
-        var response = _mapper.Map<AddTimeToWorkDayResponse>(workTimeEntity);
-        response.DayOfWeek = ((int)request.DayOfWeek).ToString();
-        response.DayOfWeekName = request.DayOfWeek.GetStringValue();
+        var response = new AddTimeToWorkDayResponse
+        {
+            WorkTime = workTimeEntity
+        };
+        //response.DayOfWeek = ((int)request.DayOfWeek).ToString();
+        //response.DayOfWeekName = request.DayOfWeek.GetStringValue();
         
         return response;
     }

@@ -26,10 +26,10 @@ public sealed class AddTimeToWorkDayMapper : Profile
                 => opt.MapFrom(_ => ReservationStatus.Free))
             .ForMember(dest => dest.CreatedAt, opt
                 => opt.MapFrom(_ => DateOnly.FromDateTime(DateTime.Now)));
-        CreateMap<WorkTime, AddTimeToWorkDayResponse>()
-            .ForMember(dest => dest.Id, opt
-                => opt.MapFrom(src => src.Id.ToString()))
-            .ForMember(dest => dest.Time, opt
-                => opt.MapFrom(src => src.Time.ToString(CultureInfo.CurrentUICulture)));
+        // CreateMap<WorkTime, AddTimeToWorkDayResponse>()
+        //     .ForMember(dest => dest.Id, opt
+        //         => opt.MapFrom(src => src.Id.ToString()))
+        //     .ForMember(dest => dest.Time, opt
+        //         => opt.MapFrom(src => src.Time.ToString(CultureInfo.CurrentUICulture)));
     }
 }

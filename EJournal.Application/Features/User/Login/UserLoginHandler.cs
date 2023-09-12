@@ -44,7 +44,7 @@ public sealed class UserLoginHandler : IRequestHandler<UserLoginRequest, UserLog
         };
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
         var tokenDescriptor = new JwtSecurityToken(issuer, audience, claims,
-            expires: DateTime.Now.AddHours(6), signingCredentials: credentials);
+            expires: DateTime.Now.AddDays(7), signingCredentials: credentials);
         var response = _mapper.Map<UserLoginResponse>(foundUser);
         var token = new JwtSecurityTokenHandler().WriteToken(tokenDescriptor);
         response.JwtToken = token;
