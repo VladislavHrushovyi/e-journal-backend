@@ -12,10 +12,10 @@ public sealed class WorkDayRepository : BaseRepository<WorkDay>, IWorkDayReposit
     {
     }
 
-    public async Task<WorkDay> GetByDayOfWeek(CustomDayOfWeek customDayOfWeek)
+    public async Task<WorkDay> GetByDayOfWeek(CustomDayOfWeek customDayOfWeek, CancellationToken ct)
     {
-        var day = await _collection.FindAsync(d => d.DayOfWeek == customDayOfWeek);
+        var day = await _collection.FindAsync(d => d.DayOfWeek == customDayOfWeek, cancellationToken: ct);
 
-        return day.FirstOrDefault();
+        return day.FirstOrDefault(cancellationToken: ct);
     }
 }

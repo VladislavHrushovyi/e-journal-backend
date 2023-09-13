@@ -21,7 +21,7 @@ public sealed class AddTimeToWorkDayHandler : IRequestHandler<AddTimeToWorkDayRe
     public async Task<AddTimeToWorkDayResponse> Handle(AddTimeToWorkDayRequest request, CancellationToken cancellationToken)
     {
         var workTimeEntity = _mapper.Map<WorkTime>(request);
-        var workDayByDayOfWeek = await _unitOfWork._WorkDayRepository.GetByDayOfWeek(request.DayOfWeek);
+        var workDayByDayOfWeek = await _unitOfWork._WorkDayRepository.GetByDayOfWeek(request.DayOfWeek, cancellationToken);
         if (!workDayByDayOfWeek.IsWorkDay || workDayByDayOfWeek == default)
         {
             throw new BadRequestException("This day is not working or does`nt not found!!");
